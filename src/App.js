@@ -8,6 +8,7 @@ class App extends React.Component {
     this.state = {
       githubUser: [],
       githubUserFollowers: [],
+      inputText: "",
     };
     console.log("constructor is constructing");
   }
@@ -23,10 +24,10 @@ class App extends React.Component {
       .catch((error) => {
         console.log("error with API response", error);
       });
-    Axios.get("https://api.github.com/users/lyntechi/followers")
+    Axios.get(`https://api.github.com/users/lyntechi/followers`)
       .then((response) => {
         this.setState({
-          githubUserFollowers: response.data,
+          githubUserFollowers: response.data
         });
         console.log(response);
       })
@@ -43,23 +44,45 @@ class App extends React.Component {
       ? console.log("user followers data has changed")
       : console.log("user followers didnt change");
   }
-
+  inputChanger = (e) => {
+    this.setState({
+      inputText: e.target.value,
+    });
+  };
+  formSubmit = (e) => {
+    e.preventDefault();
+  };
   render() {
     console.log("app is rendering");
     return (
       <div className="App">
-        <div>
+        <div className="userInfo">
           <h1>My Github Info</h1>
           <img src={this.state.githubUser.avatar_url} alt="" />
           <p> Name: {this.state.githubUser.name}</p>
           <p> Login Name: {this.state.githubUser.login}</p>
-          <p><a href={this.state.githubUser.html_url}>Profile Link</a></p> 
+          <p>
+            <a href={this.state.githubUser.html_url}>Profile Link</a>
+          </p>
           <p>Bio: {this.state.githubUser.bio}</p>
-          <p>Following: {this.state.githubUser.following}</p>
-          <p>Followers: {this.state.githubUser.followers}</p>
+          <span className="followings">Following: {this.state.githubUser.following} |
+          Followers: {this.state.githubUser.followers}</span>
         </div>
         <div className="followersList">
-          {/* <h1>My Followers</h1> */}
+          <div className="followersTitle">
+            {" "}
+            <h1>Github Followers</h1>
+            <form onSubmit={this.formSubmit}>
+              <input
+                type="text"
+                name="inputText"
+                value={this.state.inputText}
+                onChange={this.inputChanger}
+                placeholder="Type Here"
+              /><br/>
+              <button>Search</button>
+            </form>
+          </div>
           {this.state.githubUserFollowers.map((item) => {
             return (
               <div className="followers" key={item.id}>
