@@ -7,6 +7,7 @@ class App extends React.Component {
     super();
     this.state = {
       githubUser: [],
+      githubUserFollowers: [],
     };
     console.log("constructor is constructing");
   }
@@ -17,6 +18,17 @@ class App extends React.Component {
         this.setState({
           githubUser: response.data,
         });
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log("error with API response", error);
+      });
+    Axios.get("https://api.github.com/users/lyntechi/followers")
+      .then((response) => {
+        this.setState({
+          githubUserFollowers: response.data,
+        });
+        console.log(response);
       })
       .catch((error) => {
         console.log("error with API response", error);
@@ -25,12 +37,41 @@ class App extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     console.log("componentDidUpdate");
     prevState.githubUser !== this.state.githubUser
-      ? console.log("data has changed") 
-      : console.log("didnt change");
+      ? console.log("github data has changed")
+      : console.log("github data didnt change");
+    prevState.githubUserFollowers !== this.state.githubUserFollowers
+      ? console.log("user followers data has changed")
+      : console.log("user followers didnt change");
   }
+
   render() {
     console.log("app is rendering");
-    return <div className="App"></div>;
+    return (
+      <div className="App">
+        <div>
+          <h1>My Github Info</h1>
+          <img src={this.state.githubUser.avatar_url} alt="" />
+          <p> Name: {this.state.githubUser.name}</p>
+          <p> Github Name: {this.state.githubUser.login}</p>
+          <p>Bio: {this.state.githubUser.bio}</p>
+          <p>Following: {this.state.githubUser.following}</p>
+          <p>Followers: {this.state.githubUser.followers}</p>
+        </div>
+        <div className="followersList">
+          {/* <h1>My Followers</h1> */}
+          {this.state.githubUserFollowers.map((item) => {
+            return (
+              <div className="followers" key={item.id}>
+                <img src={item.avatar_url} alt=""/>
+                Login Name: {item.login}<br/>
+               <a href={item.html_url}>User Profile</a> 
+
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
   }
 }
 export default App;
