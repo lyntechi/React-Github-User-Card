@@ -52,7 +52,8 @@ class App extends React.Component {
           <h1>My Github Info</h1>
           <img src={this.state.githubUser.avatar_url} alt="" />
           <p> Name: {this.state.githubUser.name}</p>
-          <p> Github Name: {this.state.githubUser.login}</p>
+          <p> Login Name: {this.state.githubUser.login}</p>
+          <p><a href={this.state.githubUser.html_url}>Profile Link</a></p> 
           <p>Bio: {this.state.githubUser.bio}</p>
           <p>Following: {this.state.githubUser.following}</p>
           <p>Followers: {this.state.githubUser.followers}</p>
@@ -62,10 +63,10 @@ class App extends React.Component {
           {this.state.githubUserFollowers.map((item) => {
             return (
               <div className="followers" key={item.id}>
-                <img src={item.avatar_url} alt=""/>
-                Login Name: {item.login}<br/>
-               <a href={item.html_url}>User Profile</a> 
-
+                <img src={item.avatar_url} alt="" />
+                Login Name: {item.login}
+                <br />
+                <a href={item.html_url}>Profile Link</a>
               </div>
             );
           })}
